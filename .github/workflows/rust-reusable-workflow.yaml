@@ -8,43 +8,36 @@ on:
       toolchain:
         description: 'Rust toolchain version (e.g., stable, nightly)'
         required: true
-        default: 'stable'
         type: string
       target:
         description: 'Compilation target (e.g., x86_64-unknown-linux-gnu)'
         required: true
-        default: 'x86_64-unknown-linux-gnu'
         type: string
       components:
         description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
         required: false
-        default: 'clippy, rustfmt, llvm-tools'
         type: string
       rustflags:
         description: 'Rust compiler flags (e.g., -C opt-level=3 -C target-cpu=native -C lto)'
         required: false
-        default: ''
         type: string
       release:
         description: 'Build release version (true/false)'
         required: true
-        default: 'true'
         type: boolean
       cache:
         description: 'Enable cache (true/false)'
         required: false
-        default: 'true'
         type: boolean
       cache-key:
         description: 'Cache key for cargo cache'
         required: false
-        default: 'cargo-cache'
         type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Check out the repository
       uses: actions/checkout@v2
@@ -77,7 +70,7 @@ jobs:
 
     - name: Build Project
       run: |
-        if [ "${{ inputs.release }}" == "true" ]; then
+        if ${{ inputs.release }}; then
           cargo build --release
         else
           cargo build

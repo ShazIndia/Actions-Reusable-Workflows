@@ -21,18 +21,7 @@ on:
         description: 'Rust compiler flags (e.g., -C opt-level=3 -C target-cpu=native -C lto)'
         required: false
         type: string
-      release:
-        description: 'Build release version (true/false)'
-        required: true
-        type: boolean
-      cache:
-        description: 'Enable cache (true/false)'
-        required: false
-        type: boolean
-      cache-key:
-        description: 'Cache key for cargo cache'
-        required: false
-        type: string
+      
 
 jobs:
   build:
@@ -61,20 +50,8 @@ jobs:
     - name: Set Rust flags
       run: echo "RUSTFLAGS=${{ inputs.rustflags }}" >> $GITHUB_ENV
 
-    - name: Set up cache
-      if: ${{ inputs.cache }}
-      uses: actions/cache@v2
-      with:
-        path: ~/.cargo
-        key: ${{ inputs.cache-key }}
-
     - name: Build Project
-      run: |
-        if ${{ inputs.release }}; then
-          cargo build --release
-        else
-          cargo build
-        fi
+      run: cargo build --release
 
     - name: Run Tests
       run: cargo test

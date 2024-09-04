@@ -54,7 +54,7 @@ jobs:
       run: cargo auditable build --release
 
     - name: Run cargo audit on the built binary
-      run: cargo audit bin --package-path ./target/release/blockchain-rust
+      run: cargo audit bin ./target/release/blockchain-rust
 
     - name: Run tests
       run: cargo test --verbose

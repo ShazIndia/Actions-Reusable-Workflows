@@ -17,22 +17,6 @@ on:
         description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
         required: false
         type: string
-      rustflags:
-        description: 'Rust compiler flags (e.g., -C opt-level=3 -C target-cpu=native -C lto)'
-        required: false
-        type: string
-      release:
-        description: 'Build release version (true/false)'
-        required: true
-        type: boolean
-      cache:
-        description: 'Enable cache (true/false)'
-        required: false
-        type: boolean
-      cache-key:
-        description: 'Cache key for cargo cache'
-        required: false
-        type: string
 
 jobs:
   build:
@@ -58,26 +42,22 @@ jobs:
           done
         fi
 
-    - name: Set Rust flags
-      run: echo "RUSTFLAGS=${{ inputs.rustflags }}" >> $GITHUB_ENV
-
-    - name: Set up cache
-      if: ${{ inputs.cache }}
-      uses: actions/cache@v2
-      with:
-        path: ~/.cargo
-        key: ${{ inputs.cache-key }}
-
-    - name: Build Project
+    - name: Install cargo-audit and cargo-auditable
       run: |
-        if ${{ inputs.release }}; then
-          cargo build --release
-        else
-          cargo build
-        fi
+        cargo install cargo-audit
+        cargo install cargo-auditable
 
-    - name: Run Tests
-      run: cargo test
+    - name: Run cargo audit on dependencies
+      run: cargo audit
+
+    - name: Build the blockchain project using cargo auditable
+      run: cargo auditable build --release
+
+    - name: Run cargo audit on the built binary
+      run: cargo audit bin --package-path ./target/release/blockchain-rust
+
+    - name: Run tests
+      run: cargo test --verbose
 
     - name: Display Rust Environment
       run: rustup show

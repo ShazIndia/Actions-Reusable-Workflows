@@ -45,13 +45,12 @@ jobs:
     - name: Install cargo-audit and cargo-auditable
       run: |
         cargo install cargo-audit
-        cargo install cargo-auditable
 
     - name: Run cargo audit on dependencies
       run: cargo audit
 
-    - name: Build the blockchain project using cargo auditable
-      run: cargo auditable build --release
+    - name: Build the blockchain project
+      run: cargo build --release
 
     - name: Run cargo audit on the built binary
       run: cargo audit bin ./target/release/blockchain-rust

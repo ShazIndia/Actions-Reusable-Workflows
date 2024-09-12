@@ -11,7 +11,7 @@ on:
         type: string
       target:
         description: 'Compilation target (e.g., x86_64-unknown-linux-gnu)'
-        required: true
+        required: false
         type: string
       components:
         description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
@@ -42,7 +42,7 @@ jobs:
           done
         fi
 
-    - name: Install cargo-audit and cargo-auditable
+    - name: Install cargo-audit
       run: |
         cargo install cargo-audit
 

@@ -47,7 +47,7 @@ jobs:
         cargo install cargo-audit
 
     - name: Run cargo audit on dependencies
-      run: cargo audit
+      run: cargo audit --verbose
 
     - name: Build the blockchain project
       run: cargo build --release

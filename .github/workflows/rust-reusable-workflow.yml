@@ -44,7 +44,7 @@ jobs:
 
     - name: Install cargo-audit
       run: |
-        cargo install cargo-audit
+        cargo install cargo-audit --force
 
     - name: Run cargo audit on dependencies
       run: cargo audit --verbose

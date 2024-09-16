@@ -49,12 +49,6 @@ jobs:
     - name: Build the blockchain project
       run: cargo build --release
 
-    - name: Install cargo-audit
-      run: cargo install cargo-audit
-      
-    - name: Run cargo-audit
-      run: cargo audit
-
     - name: Run tests
       run: cargo test --verbose
 

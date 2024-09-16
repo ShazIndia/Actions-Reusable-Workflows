@@ -27,22 +27,15 @@ jobs:
 
     steps:
 
+    - uses: actions/checkout@v3
+      name: Checkout code
+      
     - name: Set up Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
         toolchain: "${{ inputs.toolchain }}"
         target: "${{ inputs.target }}"
         components: "${{ inputs.components }}"
-
-    - name: Install additional components
-      run: |
-        if [ -n "${{ inputs.components }}" ]; then
-          IFS=',' read -r -a components <<< "${{ inputs.components }}"
-          for component in "${components[@]}"; do
-            rustup component add "$(echo $component | xargs)"
-          done
-        fi
-
 
     - name: Install cargo-audit
       run: cargo install cargo-audit

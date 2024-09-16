@@ -1,0 +1,44 @@
+# .github/workflows/reusable-workflow.yml
+
+name: Scan Stage
+
+on:
+  workflow_call:
+    inputs:
+      toolchain:
+        description: 'Rust toolchain version (e.g., stable, nightly)'
+        required: true
+        type: string
+      target:
+        description: 'Compilation target (e.g., x86_64-unknown-linux-gnu)'
+        required: false
+        type: string
+      components:
+        description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
+        required: false
+        type: string
+
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+
+
+    - name: Install cargo-audit
+      run: 
+          cargo install cargo-audit
+          cargo audit
+
+    - name: Get build metadata
+      id: build-metadata
+      run: |
+        echo "Build ID: $GITHUB_RUN_ID"
+        echo "Commit SHA: $GITHUB_SHA"
+        echo "Branch: $GITHUB_REF"
+        echo "Build Status: ${{ job.status }}"
+        echo "Build Duration: ${{ job.steps.build.outputs.duration }} seconds"
+        echo "Artifact Size: $(du -sh target/release/my_app | cut -f1)"
+      shell: bash
+        

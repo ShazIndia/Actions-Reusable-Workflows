@@ -1,0 +1,55 @@
+# .github/workflows/reusable-workflow.yml
+
+name: Reusable Rust Build Workflow
+
+on:
+  workflow_call:
+    inputs:
+      toolchain:
+        description: 'Rust toolchain version (e.g., stable, nightly)'
+        required: true
+        type: string
+      target:
+        description: 'Compilation target (e.g., x86_64-unknown-linux-gnu)'
+        required: false
+        type: string
+      components:
+        description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
+        required: false
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v2
+
+    - name: Set up Rust toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: ${{ inputs.toolchain }}
+        target: ${{ inputs.target }}
+        components: ''
+
+    - name: Install additional components
+      run: |
+        if [ -n "${{ inputs.components }}" ]; then
+          IFS=',' read -r -a components <<< "${{ inputs.components }}"
+          for component in "${components[@]}"; do
+            rustup component add "$(echo $component | xargs)"
+          done
+        fi
+        
+    - name: Build the blockchain project
+      run: cargo build --release
+
+    - name: Run tests
+      run: cargo test --verbose
+
+    - name: Display Rust Environment
+      run: rustup show
+
+    - name: Display Rust Components
+      run: rustup component list --installed

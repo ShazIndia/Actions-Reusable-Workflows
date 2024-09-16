@@ -1,0 +1,40 @@
+# .github/workflows/use-reusable-workflow.yml
+
+name: Main Workflow 
+
+on:
+  workflow_dispatch:
+    inputs:
+      toolchain:
+        description: 'Rust toolchain version (e.g., stable, nightly)'
+        required: true
+        type: string
+      target:
+        description: 'Compilation target (e.g., x86_64-unknown-linux-gnu)'
+        required: true
+        type: string
+      components:
+        description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
+        required: false
+        type: string
+      rustflags:
+        description: 'Rust compiler flags (e.g., -C opt-level=3 -C target-cpu=native -C lto)'
+        required: false
+        type: string
+
+
+jobs:
+
+  build-stage:
+    uses: ShazIndia/Actions-Reusable-Workflows/.github/workflows/buildtest-workflow.yml@main
+    name: Build and Test Stage
+    with:
+      toolchain: ${{ inputs.toolchain }}
+      target: ${{ inputs.target }}
+      components: ${{ inputs.components }}
+
+  scan-stage:
+    uses: ShazIndia/Actions-Reusable-Workflows/.github/workflows/scan-workflow.yml@main
+    name: Audit Scan Stage
+    needs: build-stage
+

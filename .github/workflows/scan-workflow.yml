@@ -2,23 +2,24 @@
 name: Scan Stage
 
 on:
-  workflow_call:
-    inputs:
-      toolchain:
-        description: 'Rust toolchain version (e.g., stable, nightly)'
-        required: true
-        type: string
-        default: "stable"
-      target:
-        description: 'Compilation target (e.g., x86_64-unknown-linux-gnu)'
-        required: false
-        type: string
-        default: "x86_64-unknown-linux-gnu"
-      components:
-        description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
-        required: false
-        type: string
-        default: clippy
+    workflow_call:
+      inputs:
+        toolchain:
+          description: 'Rust toolchain version (e.g., stable, nightly)'
+          required: true
+          type: string
+        target:
+          description: 'Compilation target (e.g., x86_64-unknown-linux-gnu)'
+          required: true
+          type: string
+        components:
+          description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
+          required: false
+          type: string
+        rustflags:
+          description: 'Rust compiler flags (e.g., -C opt-level=3 -C target-cpu=native -C lto)'
+          required: false
+          type: string
 
 jobs:
   scan:
@@ -29,9 +30,9 @@ jobs:
     - name: Set up Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: ${{ inputs.toolchain }}
-        target: ${{ inputs.target }}
-        components: ''
+        toolchain: stable"
+        target: "x86_64-unknown-linux-gnu"
+        components: "clippy"
 
     - name: Install cargo-audit
       run: 

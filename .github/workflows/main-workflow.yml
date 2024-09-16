@@ -31,7 +31,7 @@ jobs:
     uses: ShazIndia/Actions-Reusable-Workflows/.github/workflows/buildtest-workflow.yml@main
     name: Build and Test Stage
     with:
-      toolchain: stable"
+      toolchain: "stable"
       target: "x86_64-unknown-linux-gnu"
       components: "clippy"
 
@@ -39,7 +39,7 @@ jobs:
     uses: ShazIndia/Actions-Reusable-Workflows/.github/workflows/scan-workflow.yml@main
     name: Audit Scan Stage
     with:
-      toolchain: stable"
+      toolchain: "stable"
       target: "x86_64-unknown-linux-gnu"
       components: "clippy"      
     needs: build-stage

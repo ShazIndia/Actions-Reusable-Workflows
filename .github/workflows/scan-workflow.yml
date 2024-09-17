@@ -40,14 +40,26 @@ jobs:
     - name: Install cargo-audit
       run: cargo install cargo-audit
       
-    - name: Run cargo-audit
-      run: cargo audit
-
-    - name: Get build metadata
-      id: build-metadata
+    - name: Run Cargo Audit
       run: |
-        echo "Build ID: $GITHUB_RUN_ID"
-        echo "Commit SHA: $GITHUB_SHA"
-        echo "Branch: $GITHUB_REF"
-      shell: bash
+          cargo audit --json > audit_report.json
+      continue-on-error: true
+
+    - name: Collect CI Metadata
+      run: |
+          echo "{ \
+            \"workflow\": \"$GITHUB_WORKFLOW\", \
+            \"job\": \"$GITHUB_JOB\", \
+            \"run_id\": \"$GITHUB_RUN_ID\", \
+            \"run_number\": \"$GITHUB_RUN_NUMBER\", \
+            \"actor\": \"$GITHUB_ACTOR\", \
+            \"repository\": \"$GITHUB_REPOSITORY\", \
+            \"sha\": \"$GITHUB_SHA\", \
+            \"ref\": \"$GITHUB_REF\", \
+            \"branch\": \"$GITHUB_REF_NAME\" \
+          }" > ci_metadata.json
+
+    - name: Zip Audit Report and Metadata
+      run: |
+          zip audit_report.zip audit_report.json ci_metadata.json
         

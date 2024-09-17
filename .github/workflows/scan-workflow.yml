@@ -63,14 +63,15 @@ jobs:
       run: |
           zip audit_report.zip audit_report.json ci_metadata.json
 
-    - name: Upload to Artifactory
-      run: |
-          curl -u ${{ secrets.ARTIFACTORY_USER }}:${{ secrets.ARTIFACTORY_API_KEY }} \
-          -T audit_report.zip \
-          "https://<artifactory_domain>/artifactory/<repo>/audit_report_${{ github.sha }}.zip"
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
-      # Step 8: Clean up
-    - name: Clean Up
+    - name: Upload Zipped Report to Docker Hub Artifactory
       run: |
-          rm audit_report.json ci_metadata.json audit_report.zip
+        curl -u ${{ secrets.DOCKER_HUB_USERNAME }}:${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} \
+        -T audit_report.zip \
+        "https://hub.docker.com/v2/repositories/shazindia86/rust-cargo/artifacts/audit_report.zip"
+      env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
         

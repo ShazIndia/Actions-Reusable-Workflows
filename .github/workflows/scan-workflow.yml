@@ -65,8 +65,8 @@ jobs:
 
     - name: Debug Docker Hub Credentials
       run: |
-        echo "Username: ${{ secrets.DOCKER_HUB_USERNAME }}"
-        echo "Access Token Length: ${#secrets.DOCKER_HUB_ACCESS_TOKEN}"
+        echo "Username: ${{ secrets.DOCKER_USERNAME }}"
+        echo "Access Token Length: ${#secrets.DOCKER_PASSWORD}"
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin

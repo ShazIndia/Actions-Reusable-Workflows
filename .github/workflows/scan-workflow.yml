@@ -62,4 +62,15 @@ jobs:
     - name: Zip Audit Report and Metadata
       run: |
           zip audit_report.zip audit_report.json ci_metadata.json
+
+    - name: Upload to Artifactory
+      run: |
+          curl -u ${{ secrets.ARTIFACTORY_USER }}:${{ secrets.ARTIFACTORY_API_KEY }} \
+          -T audit_report.zip \
+          "https://<artifactory_domain>/artifactory/<repo>/audit_report_${{ github.sha }}.zip"
+
+      # Step 8: Clean up
+    - name: Clean Up
+      run: |
+          rm audit_report.json ci_metadata.json audit_report.zip
         

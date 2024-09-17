@@ -63,6 +63,11 @@ jobs:
       run: |
           zip audit_report.zip audit_report.json ci_metadata.json
 
+    - name: Debug Docker Hub Credentials
+      run: |
+        echo "Username: ${{ secrets.DOCKER_HUB_USERNAME }}"
+        echo "Access Token Length: ${#secrets.DOCKER_HUB_ACCESS_TOKEN}""
+
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
@@ -74,4 +79,5 @@ jobs:
       env:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          
         

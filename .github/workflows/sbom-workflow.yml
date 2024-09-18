@@ -40,7 +40,7 @@ jobs:
       run: cargo install cargo-cyclonedx
 
     - name: Generate SBOM
-      run: cargo cyclonedx create --output sbom.xml
+      run: cargo cyclonedx --output sbom.xml
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2

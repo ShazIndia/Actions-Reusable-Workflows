@@ -64,6 +64,7 @@ jobs:
           zip audit_report.zip audit_report.json ci_metadata.json
 
     
+          
     - name: For testing docker login
       uses: docker/login-action@v3
       with:

@@ -40,7 +40,7 @@ jobs:
       run: cargo install cargo-cyclonedx
 
     - name: Generate SBOM
-      run: cargo cyclonedx --output sbom.xml
+      run: cargo cyclonedx
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -55,4 +55,4 @@ jobs:
             -e DOCKER_HUB_ACCESS_TOKEN=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} \
             -v ${{ github.workspace }}:/workspace \
             shazindia86/rust-app:latest \
-            sh -c 'mkdir -p /workspace/sbom && mv /workspace/sbom.xml /workspace/sbom/ && docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_ACCESS_TOKEN" && docker push shazindia86/rust-app:latest'
+            sh -c 'mkdir -p /workspace/sbom && mv /workspace/bom.xml /workspace/sbom/ && docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_ACCESS_TOKEN" && docker push shazindia86/rust-app:latest'

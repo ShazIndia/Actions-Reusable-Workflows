@@ -44,3 +44,12 @@ jobs:
       components: "clippy"      
     needs: build-stage
 
+  sbom-stage:
+      uses: ShazIndia/Actions-Reusable-Workflows/.github/workflows/sbom-workflow.yml@main
+      name: Audit Scan Stage
+      with:
+        toolchain: "stable"
+        target: "x86_64-unknown-linux-gnu"
+        components: "clippy"      
+      needs: build-stage
+

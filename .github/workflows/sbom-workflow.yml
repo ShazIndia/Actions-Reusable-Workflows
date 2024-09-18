@@ -40,19 +40,19 @@ jobs:
       run: cargo install cargo-cyclonedx
 
     - name: Generate SBOM
-      run: cargo cyclonedx
+      run: cargo cyclonedx --format json --verbose --all
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Upload SBOM to Docker Hub
       run: |
           docker run --rm \
-            -e DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }} \
-            -e DOCKER_HUB_ACCESS_TOKEN=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} \
+            -e DOCKER_HUB_USERNAME=${{ secrets.DOCKER_USERNAME }} \
+            -e DOCKER_HUB_ACCESS_TOKEN=${{ secrets.DOCKER_PASSWORD }} \
             -v ${{ github.workspace }}:/workspace \
             shazindia86/rust-app:latest \
-            sh -c 'mkdir -p /workspace/sbom && mv /workspace/bom.xml /workspace/sbom/ && docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_ACCESS_TOKEN" && docker push shazindia86/rust-app:latest'
+            sh -c 'mkdir -p /workspace/sbom && mv /workspace/bom.xml /workspace/sbom/ && docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" && docker push shazindia86/rust-app:latest'

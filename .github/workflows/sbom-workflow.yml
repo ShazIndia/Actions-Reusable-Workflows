@@ -15,14 +15,14 @@ on:
           description: 'Rust components to install (comma-separated, e.g., clippy, rustfmt, llvm-tools)'
           required: false
           type: string
-        rustflags:
-          description: 'Rust compiler flags (e.g., -C opt-level=3 -C target-cpu=native -C lto)'
-          required: false
+        runner_name:
+          required: true
           type: string
+        
 
 jobs:
   scan:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner_name }}
 
     steps:
 
@@ -38,14 +38,14 @@ jobs:
 
     - name: Install cargo-audit
       run: cargo install cargo-audit
+
+    - name: Build the Rust project
+      run: cargo build --release
       
     - name: Run Cargo Audit
       run: |
           cargo audit --json > audit_report.json
       continue-on-error: true
-
-    - name: Build the Rust project
-      run: cargo build --release
 
     - name: Install Cargo CycloneDX
       run: cargo install cargo-cyclonedx

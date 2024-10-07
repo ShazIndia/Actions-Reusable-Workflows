@@ -1,0 +1,36 @@
+# .github/workflows/release-workflow.yml
+name: Reusable Release Workflow
+
+on:
+  workflow_call:
+    inputs:
+      release_version:
+        description: 'Version of the release'
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create a release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ inputs.release_version }}
+          release_name: Release ${{ inputs.release_version }}
+          body: |
+            Release notes for version ${{ inputs.release_version }}
+          draft: false
+          prerelease: false
+
+      - name: Upload release assets (optional)
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./path-to-asset.zip
+          asset_name: my-asset.zip
+          asset_content_type: application/zip

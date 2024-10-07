@@ -38,6 +38,11 @@ jobs:
           git config --global user.name "${{ inputs.git_username }}"
           git config --global user.email "${{ inputs.git_email }}"
 
+      - name: Authenticate with PAT
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
+
+
       # Step 3: Create the release branch
       - name: Create and push release branch
         run: |

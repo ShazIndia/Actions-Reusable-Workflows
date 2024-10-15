@@ -42,9 +42,8 @@ jobs:
       
     - name: Run Cargo Audit
       run: |
-          RUST_LOG=trace cargo audit
-          #cargo audit --json > audit_report.json
-          #cat audit_report.json
+          RUST_LOG=trace cargo audit --json > audit_report.json
+          cat audit_report.json
       continue-on-error: true
 
       

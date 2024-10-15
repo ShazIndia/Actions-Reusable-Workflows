@@ -42,7 +42,7 @@ jobs:
       
     - name: Run Cargo Audit
       run: |
-          cargo audit --json > audit_report.json
+          cargo audit --log-level debug --json > audit_report.json
       continue-on-error: true
 
     - name: Collect CI Metadata

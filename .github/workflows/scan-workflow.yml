@@ -42,8 +42,11 @@ jobs:
       
     - name: Run Cargo Audit
       run: |
-          cargo audit --log-level debug --json > audit_report.json
+          cargo audit -v --json > audit_report.json
+          cat audit_report.json
       continue-on-error: true
+
+      
 
     - name: Collect CI Metadata
       run: |
@@ -64,23 +67,3 @@ jobs:
           zip audit_report.zip audit_report.json ci_metadata.json
 
     
-          
-    - name: For testing docker login
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-    - name: Log in to Docker Hub
-      run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-
-    - name: Upload Zipped Report to Docker Hub Artifactory
-      run: |
-        curl -u ${{ secrets.DOCKER_HUB_USERNAME }}:${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} \
-        -T audit_report.zip \
-        "https://hub.docker.com/v2/repositories/shazindia86/rust-cargo/artifacts/audit_report.zip"
-      env:
-          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-          DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-          
-        

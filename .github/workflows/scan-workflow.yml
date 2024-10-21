@@ -57,6 +57,7 @@ jobs:
       run: |
         sudo apt-get update && sudo apt-get install -y moreutils
         script -q -c "cargo audit --json" | ts '[%Y-%m-%d %H:%M:%S]' > audit_report.log
+        cat audit_report.log
 
       #continue-on-error: true
 

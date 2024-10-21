@@ -42,17 +42,21 @@ jobs:
           sudo apt-get install jq
           cargo install cargo-audit
       
-    - name: Run Cargo Audit
+    #- name: Run Cargo Audit
      # run: |
           #RUST_LOG=trace cargo audit --no-fetch --json | jq . > audit_report.json
           #RUST_LOG=trace cargo audit --no-fetch --json > audit_report.json
           
-      env:
-        RUST_LOG: debug,cargo_audit=trace  
-      run: |
-        cargo audit --no-fetch --json | jq . > audit_report.json
-        cat audit_report.json
+      #env:
+      #  RUST_LOG: debug,cargo_audit=trace  
+#      run: |
+      #  cargo audit --no-fetch --json | jq . > audit_report.json
+      #  cat audit_report.json
 
+    - name: Run Cargo Audit with Timestamped Logs
+      run: |
+        sudo apt-get update && sudo apt-get install -y moreutils
+        script -q -c "cargo audit --json" | ts '[%Y-%m-%d %H:%M:%S]' > audit_report.log
 
       #continue-on-error: true
 

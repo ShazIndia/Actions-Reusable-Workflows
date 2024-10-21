@@ -50,7 +50,7 @@ jobs:
       env:
         RUST_LOG: debug,cargo_audit=trace  
       run: |
-        cargo audit --json | jq . > audit_report.json
+        cargo audit --no-fetch --json | jq . > audit_report.json
         cat audit_report.json
 
 

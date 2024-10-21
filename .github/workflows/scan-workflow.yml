@@ -43,11 +43,18 @@ jobs:
           cargo install cargo-audit
       
     - name: Run Cargo Audit
-      run: |
-          RUST_LOG=trace cargo audit --no-fetch --json | jq . > audit_report.json
+     # run: |
+          #RUST_LOG=trace cargo audit --no-fetch --json | jq . > audit_report.json
           #RUST_LOG=trace cargo audit --no-fetch --json > audit_report.json
-          cat audit_report.json
-      continue-on-error: true
+          
+      env:
+        RUST_LOG: debug,cargo_audit=trace  
+      run: |
+        cargo audit --json > audit_report.json
+        cat audit_report.json
+
+
+      #continue-on-error: true
 
       
 
